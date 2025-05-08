@@ -1,0 +1,114 @@
+.doctors-page {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.doctors-title {
+    color: #2A8D95;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2.5rem;
+}
+
+.doctors-filters {
+    margin-bottom: 2rem;
+}
+
+.specialty-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.specialty-button {
+    padding: 0.75rem 1.5rem;
+    border: 2px solid #2A8D95;
+    border-radius: 25px;
+    background: transparent;
+    color: #2A8D95;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.specialty-button:hover {
+    background: #2A8D95;
+    color: white;
+}
+
+.specialty-button.active {
+    background: #2A8D95;
+    color: white;
+}
+
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.search-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #2A8D95;
+}
+
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.doctors-loading {
+    text-align: center;
+    padding: 2rem;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.doctors-error {
+    text-align: center;
+    padding: 2rem;
+    color: #ff4444;
+    font-size: 1.2rem;
+}
+
+.no-doctors-found {
+    text-align: center;
+    padding: 3rem;
+    color: #666;
+    font-size: 1.2rem;
+    background: #f5f5f5;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+@media (max-width: 768px) {
+    .doctors-page {
+        padding: 1rem;
+    }
+
+    .doctors-title {
+        font-size: 2rem;
+    }
+
+    .specialty-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .doctors-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,69 @@
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0097a7;
+    color: #fff;
+    padding: 0 42px;
+    height: 74px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+  
+  .topbar__logo {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex; /* Чтобы выровнять изображение внутри */
+    align-items: center; /* Выровнять по вертикали */
+  }
+  
+  .topbar__logo img {
+    height: 40px;
+    width: 120px;
+  }
+  
+  .topbar__nav {
+    display: flex;
+    gap: 24px;
+  }
+  
+  .topbar__link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  
+  .topbar__link:hover {
+    color: #ffe082;
+  }
+  
+  .topbar__actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .topbar__btn {
+    background: #fff;
+    color: #0097a7;
+    border: none;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  
+  .topbar__btn--outline {
+    background: transparent;
+    color: #fff;
+    border: 1.5px solid #fff;
+  }
+  
+  .topbar__btn:hover {
+    background: #ffe082;
+    color: #0097a7;
+  }

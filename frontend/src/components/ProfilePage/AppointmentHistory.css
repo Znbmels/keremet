@@ -1,0 +1,74 @@
+.appointment-history-section {
+    margin-top: 20px;
+}
+
+.appointment-history-section h2 {
+    color: #0097a7;
+    margin-bottom: 15px;
+}
+
+.appointment-history-list {
+    list-style: none;
+    padding: 0;
+}
+
+.appointment-history-item {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.appointment-info {
+    flex-grow: 1;
+}
+
+.doctor-name {
+    font-size: 1.2rem;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.appointment-date,
+.appointment-time,
+.appointment-specialty {
+    color: #777;
+    margin-bottom: 3px;
+    font-size: 0.9rem;
+}
+
+.calendar-icon,
+.time-icon {
+    margin-right: 5px;
+}
+
+.appointment-details {
+    text-align: right;
+}
+
+.appointment-reason {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.appointment-status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.appointment-status.completed {
+    background-color: #4CAF50;
+}
+
+.appointment-status.canceled {
+    background-color: #f44336;
+}
+
+/* Добавьте стили для других статусов, если необходимо */

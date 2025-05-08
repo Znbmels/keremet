@@ -1,0 +1,15 @@
+.medical-records-list {
+  list-style: none;
+  padding: 0;
+}
+
+.medical-record-item {
+  background: #f4fafa;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}

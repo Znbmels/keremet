@@ -1,0 +1,30 @@
+.multi-box-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 40px 20px;
+  background-color: #f9f9f9;
+}
+
+.mui-card-root {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0px 2px 1px -1px rgba(255, 255, 255, 0.2), 0px 1px 1px 0px rgba(255, 255, 255, 0.14), 0px 1px 3px 0px rgba(255, 255, 255, 0.12);
+  margin: 16px;
+  max-width: 300px;
+}
+
+.mui-card-content-root {
+  padding: 16px;
+}
+
+.mui-typography-h5 {
+  font-size: 1.5rem;
+  color: #0097a7;
+  margin-bottom: 10px;
+}
+
+.mui-typography-body1 {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.5;
+}

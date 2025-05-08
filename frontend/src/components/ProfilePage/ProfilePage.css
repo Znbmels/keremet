@@ -1,0 +1,259 @@
+.profile-page {
+    display: grid;
+    grid-template-columns: 200px 1fr 250px;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "sidebar content notifications";
+    gap: 20px;
+    padding: 20px;
+    font-family: 'Montserrat', Arial, sans-serif;
+    background-color: #f4fafa;
+    min-height: 100vh; /* Чтобы футер был внизу, если мало контента */
+}
+
+.profile-sidebar {
+    grid-area: sidebar;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: #00bcd4;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-name {
+    color: #333;
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.profile-navigation {
+    width: 100%;
+}
+
+.profile-nav-item {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #555;
+    border-radius: 5px;
+    margin-bottom: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.profile-nav-item.active,
+.profile-nav-item:hover {
+    background-color: #00bcd4;
+    color: white;
+}
+
+.profile-content {
+    grid-area: content;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.profile-content h2 {
+    color: #0097a7;
+    margin-bottom: 15px;
+}
+
+.personal-info .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px 20px;
+}
+
+.personal-info .info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.personal-info label {
+    color: #777;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.personal-info span {
+    color: #333;
+}
+
+.upcoming-appointments .appointments-list {
+    list-style: none;
+    padding: 0;
+}
+
+.upcoming-appointments .appointment-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.upcoming-appointments .appointment-item:last-child {
+    border-bottom: none;
+}
+
+.upcoming-appointments .appointment-item button {
+    background-color: #00bcd4;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.upcoming-appointments .appointment-item button:hover {
+    background-color: #008ba7;
+}
+
+.profile-notifications {
+    grid-area: notifications;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.profile-notifications h2 {
+    color: #0097a7;
+    margin-bottom: 15px;
+}
+.edit-button {
+    background: none;
+    border: none;
+    color: #00bcd4;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #e0f7fa;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 500px;
+    max-width: 90%;
+}
+
+.modal-content h2 {
+    color: #0097a7;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group small {
+    color: #777;
+    display: block;
+    margin-top: 5px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-actions button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-left: 10px;
+}
+
+.modal-actions button:first-child {
+    background-color: #f44336;
+    color: white;
+}
+
+.modal-actions button:first-child:hover {
+    background-color: #d32f2f;
+}
+
+.modal-actions .save-button {
+    background-color: #00bcd4;
+    color: white;
+}
+
+.modal-actions .save-button:hover {
+    background-color: #008ba7;
+}
