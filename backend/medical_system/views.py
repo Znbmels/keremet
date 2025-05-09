@@ -127,7 +127,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             return Response({"error": "Time slot is not available"}, status=status.HTTP_400_BAD_REQUEST)
         time_slot.status = 'BOOKED'
         time_slot.save()
-        appointment = serializer.save(patient=self.request.user)
+        appointment = serializer.save(patient=self.request.user, doctor=time_slot.doctor)
         send_mail(
             'Appointment Confirmation',
             f'You have booked an appointment with {appointment.doctor} at {appointment.time_slot.start_time}',

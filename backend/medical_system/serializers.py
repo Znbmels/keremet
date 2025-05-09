@@ -50,7 +50,7 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor = UserSerializer(read_only=True)
     patient = UserSerializer(read_only=True)
-    time_slot = TimeSlotSerializer(read_only=True)
+    time_slot = serializers.PrimaryKeyRelatedField(queryset=TimeSlot.objects.all())
     class Meta:
         model = Appointment
         fields = ['id', 'doctor', 'patient', 'time_slot', 'status', 'reason']

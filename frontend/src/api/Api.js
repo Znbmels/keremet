@@ -326,7 +326,7 @@ export const patientApi = {
 
   getDoctorTimeSlots: async (doctorId) => {
     try {
-      const response = await api.get(`/doctors/${doctorId}/time-slots/`);
+      const response = await api.get(`/doctor/time-slots/?doctor=${doctorId}`);
       return response.data;
     } catch (error) {
       console.error('Error fetching doctor time slots:', error);

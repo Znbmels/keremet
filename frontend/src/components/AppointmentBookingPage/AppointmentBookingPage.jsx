@@ -66,8 +66,8 @@ export default function AppointmentBookingPage({ onBook }) {
     try {
       setLoading(true);
       await patientApi.bookAppointment({
-        doctor_id: selectedDoctor.id,
-        time_slot_id: selectedSlot.id,
+        time_slot: selectedSlot.id,
+        status: 'SCHEDULED'
       });
       setSuccess(true);
       if (onBook) {

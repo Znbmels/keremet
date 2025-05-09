@@ -10,72 +10,52 @@ const SPECIALTY_LABELS = {
     DENTIST: 'Стоматолог'
 };
 
-function DoctorCard({ doctor, onSelect, isPatientView, isCurrentDoctor }) {
+function DoctorCard({ doctor, onSelect, isPatientView }) {
     const fullName = `${doctor.first_name} ${doctor.last_name}`;
     const specialtyRu = SPECIALTY_LABELS[doctor.specialty] || doctor.specialty;
     const experienceYears = doctor.experience || 0;
     const experienceText = `${experienceYears} ${experienceYears === 1 ? 'год' : experienceYears < 5 ? 'года' : 'лет'}`;
 
-    const renderButton = () => {
-        if (isCurrentDoctor) {
-            return <button className="schedule-btn">Моё расписание</button>;
-        }
-        if (isPatientView) {
-            return <button className="appointment-btn">Записаться на прием</button>;
-        }
-        return <button className="view-profile-btn">Посмотреть профиль</button>;
-    };
-
     return (
-        <div className="doctor-card" onClick={onSelect}>
-            <div className="doctor-photo">
+        <div className="doctor-card-vertical">
+            <div className="doctor-photo-vertical">
                 {doctor.photo ? (
-                    <img src={doctor.photo} alt={`${doctor.first_name} ${doctor.last_name}`} />
+                    <img src={doctor.photo} alt={fullName} />
                 ) : (
-                    <div className="doctor-photo-placeholder">
+                    <div className="doctor-photo-placeholder doctor-initials-large">
                         {doctor.first_name[0]}{doctor.last_name[0]}
                     </div>
                 )}
-                </div>
-            <div className="doctor-info">
-                <h3 className="doctor-name">{fullName}</h3>
-                <p className="doctor-specialty">{specialtyRu}</p>
-                {doctor.experience && (
-                    <p className="doctor-experience">Опыт работы: {experienceText}</p>
-                )}
-                {renderButton()}
             </div>
-            
-            <div className="doctor-card-body">
-                {doctor.description && (
-                <p className="doctor-description">{doctor.description}</p>
+            <div className="doctor-info-vertical">
+                <h3 className="doctor-name-vertical">{fullName}</h3>
+                <div className="doctor-specialty-vertical">{specialtyRu}</div>
+                {doctor.experience && (
+                    <div className="doctor-experience-vertical">Опыт: {experienceText}</div>
                 )}
                 {doctor.education && (
-                    <div className="doctor-education">
-                        <h4>Образование:</h4>
-                        <p>{doctor.education}</p>
+                    <div className="doctor-education-inline">
+                        <span className="doctor-education-label">Образование:</span> {doctor.education}
                     </div>
                 )}
-                {doctor.achievements && (
-                    <div className="doctor-achievements">
-                        <h4>Достижения:</h4>
-                        <p>{doctor.achievements}</p>
-                    </div>
-                )}
-            </div>
-            
-            <div className="doctor-card-footer">
                 {doctor.consultation_price && (
-                    <div className="consultation-price">
-                        Стоимость консультации: {doctor.consultation_price} сом
+                    <div className="consultation-price-inline">
+                        Стоимость: {doctor.consultation_price} сом
                     </div>
                 )}
-                {doctor.available_for_online && (
-                    <div className="online-available">
-                        Доступен для онлайн-консультаций
-                    </div>
+                {isPatientView && (
+                    <button className="appointment-btn-wide">Записаться на прием</button>
                 )}
             </div>
+            {(doctor.description || doctor.achievements) && (
+                <div className="doctor-extra-info">
+                    {doctor.description && <div className="doctor-description-vertical">{doctor.description}</div>}
+                    {doctor.achievements && <div className="doctor-achievements-vertical">Достижения: {doctor.achievements}</div>}
+                </div>
+            )}
+            {doctor.available_for_online && (
+                <div className="online-available-vertical">Доступен для онлайн-консультаций</div>
+            )}
         </div>
     );
 }
