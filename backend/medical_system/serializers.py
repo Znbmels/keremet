@@ -36,7 +36,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class TimeSlotSerializer(serializers.ModelSerializer):
     doctor_details = UserSerializer(source='doctor', read_only=True)
-    doctor = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(role='DOCTOR'), write_only=True)
+    doctor = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.filter(role='DOCTOR'),
+        write_only=True,
+        required=False
+    )
 
     class Meta:
         model = TimeSlot
@@ -51,9 +55,15 @@ class AppointmentSerializer(serializers.ModelSerializer):
     doctor = UserSerializer(read_only=True)
     patient = UserSerializer(read_only=True)
     time_slot = TimeSlotSerializer(read_only=True)
+    time_slot_id = serializers.PrimaryKeyRelatedField(
+        queryset=TimeSlot.objects.filter(status='AVAILABLE'),
+        source='time_slot',
+        write_only=True
+    )
     class Meta:
         model = Appointment
-        fields = ['id', 'doctor', 'patient', 'time_slot', 'status', 'reason']
+        fields = ['id', 'doctor', 'patient', 'time_slot', 'time_slot_id', 'status', 'reason']
+        read_only_fields = ['doctor', 'patient', 'time_slot']
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
     patient = UserSerializer(read_only=True)

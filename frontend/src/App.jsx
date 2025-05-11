@@ -42,19 +42,17 @@ function App() {
             </ProtectedRoute>
           } />
           {userRole === 'PATIENT' && (
-            <>
-              <Route path="/doctors" element={
-                <ProtectedRoute>
-                  <DoctorsPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/tests" element={
-                <ProtectedRoute>
-                  <AnalysesPage />
-                </ProtectedRoute>
-              } />
-            </>
+            <Route path="/doctors" element={
+              <ProtectedRoute>
+                <DoctorsPage />
+              </ProtectedRoute>
+            } />
           )}
+          <Route path="/tests" element={
+            <ProtectedRoute>
+              <AnalysesPage userRole={userRole} />
+            </ProtectedRoute>
+          } />
           <Route path="/profile/*" element={
             <ProtectedRoute>
               <ProfilePage />

@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const TopBar = () => {
     const navigate = useNavigate();
     const token = localStorage.getItem('access_token');
+    const userRole = localStorage.getItem('user_role');
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
@@ -27,7 +28,9 @@ const TopBar = () => {
                 {token ? (
                     <>
                         <Link to="/home" className="topbar__link">Главная</Link>
-                        <Link to="/doctors" className="topbar__link">Врачи</Link>
+                        {userRole !== 'DOCTOR' && (
+                            <Link to="/doctors" className="topbar__link">Врачи</Link>
+                        )}
                         <Link to="/appointment" className="topbar__link">Записаться на приём</Link>
                         <Link to="/tests" className="topbar__link">Анализы</Link>
                         <Link to="/about" className="topbar__link">О нас</Link>

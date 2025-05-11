@@ -7,6 +7,7 @@ import photo from '../../assets/homepage.png'; // Импортируем изо�
 
 function HomePage() {
   const navigate = useNavigate();
+  const userRole = localStorage.getItem('user_role');
 
   const handleNavigate = (path) => {
     navigate(path);
@@ -33,12 +34,14 @@ function HomePage() {
             >
               <span className="button-icon">📊</span> Посмотреть результаты анализов
             </button>
-            <button 
-              className="homepage-button homepage-button-secondary"
-              onClick={() => handleNavigate('/doctors')}
-            >
-              <span className="button-icon">🔍</span> Найти врача
-            </button>
+            {userRole !== 'DOCTOR' && (
+              <button 
+                className="homepage-button homepage-button-secondary"
+                onClick={() => handleNavigate('/doctors')}
+              >
+                <span className="button-icon">🔍</span> Найти врача
+              </button>
+            )}
           </div>
         </div>
       </div>

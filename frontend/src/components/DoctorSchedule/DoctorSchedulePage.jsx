@@ -48,7 +48,6 @@ function DoctorSchedulePage() {
             setLoading(true);
             // Форматируем данные для отправки на сервер
             const timeSlotData = {
-                doctor: localStorage.getItem('user_id'), // ID текущего врача
                 start_time: `${newSlot.date}T${newSlot.startTime}:00Z`, // Добавляем Z для UTC
                 end_time: `${newSlot.date}T${newSlot.endTime}:00Z`, // Добавляем Z для UTC
                 status: 'AVAILABLE'

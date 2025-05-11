@@ -68,15 +68,10 @@ export default function AppointmentBookingPage({ onBook }) {
     }
     try {
       setLoading(true);
-      console.log('selectedSlot:', selectedSlot);
-      console.log('selectedSlot.id:', selectedSlot?.id);
-      console.log('Booking appointment with data:', {
-        time_slot: selectedSlot.id,
-        status: 'SCHEDULED'
-      });
       const response = await patientApi.bookAppointment({
-        time_slot: selectedSlot.id,
-        status: 'SCHEDULED'
+        time_slot_id: selectedSlot.id,
+        status: 'SCHEDULED',
+        reason: ''
       });
       console.log('Appointment created successfully:', response);
       setSuccess(true);
@@ -96,9 +91,6 @@ export default function AppointmentBookingPage({ onBook }) {
       }
       setError(msg);
       console.error('Error booking appointment:', err);
-      if (err.response) {
-        console.error('Error response data:', err.response.data);
-      }
     } finally {
       setLoading(false);
     }
