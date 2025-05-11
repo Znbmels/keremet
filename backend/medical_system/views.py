@@ -122,7 +122,10 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         return Appointment.objects.none()
 
     def perform_create(self, serializer):
-        time_slot = serializer.validated_data['time_slot']
+        time_slot = serializer.validated_data.get('time_slot')
+        if not time_slot:
+            from rest_framework import serializers
+            raise serializers.ValidationError({'time_slot': 'Это поле обязательно.'})
         if time_slot.status != 'AVAILABLE':
             return Response({"error": "Time slot is not available"}, status=status.HTTP_400_BAD_REQUEST)
         time_slot.status = 'BOOKED'
@@ -202,6 +205,7 @@ class AnalysisViewSet(viewsets.ModelViewSet):
         return queryset.order_by('-date_added')
 
     def perform_create(self, serializer):
+        # Сохраняем все поля, которые приходят с фронта
         serializer.save(doctor=self.request.user)
 
     @action(detail=True, methods=['post'])
@@ -248,8 +252,7 @@ class PatientDashboardView(generics.ListAPIView):
             ).order_by('time_slot__start_time')
         elif self.view_type == 'history':
             return Appointment.objects.filter(
-                patient=self.request.user,
-                time_slot__start_time__lt=timezone.now()
+                patient=self.request.user
             ).order_by('-time_slot__start_time')
         return Appointment.objects.none()
 

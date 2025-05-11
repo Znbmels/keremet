@@ -35,15 +35,24 @@
 
 .appointment-date,
 .appointment-time,
+.expected-time,
 .appointment-specialty {
     color: #777;
     margin-bottom: 3px;
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.expected-time {
+    color: #e67e22;
+    font-weight: 500;
 }
 
 .calendar-icon,
 .time-icon {
     margin-right: 5px;
+    color: #0097a7;
 }
 
 .appointment-details {
@@ -69,6 +78,18 @@
 
 .appointment-status.canceled {
     background-color: #f44336;
+}
+
+.appointment-status.scheduled {
+    background-color: #2196F3;
+}
+
+.error {
+    color: #f44336;
+    padding: 10px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    margin-bottom: 15px;
 }
 
 /* Добавьте стили для других статусов, если необходимо */

@@ -68,9 +68,11 @@ class Appointment(models.Model):
 class MedicalRecord(models.Model):
     patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient_records', limit_choices_to={'role': 'PATIENT'})
     doctor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='doctor_records', limit_choices_to={'role': 'DOCTOR'})
+    complaints = models.TextField(blank=True, null=True)  # Жалобы
     diagnosis = models.TextField()
     prescription = models.TextField(blank=True, null=True)
     test_result = models.TextField(blank=True, null=True)
+    analysis_file = models.FileField(upload_to='medical_records/', null=True, blank=True)  # Анализы (файл)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
@@ -80,7 +82,6 @@ class Analysis(models.Model):
     STATUS_CHOICES = (
         ('PENDING', 'В обработке'),
         ('READY', 'Готов'),
-        ('CANCELED', 'Отменен'),
     )
 
     patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='patient_analyses', limit_choices_to={'role': 'PATIENT'})
@@ -100,9 +101,18 @@ class Analysis(models.Model):
             self.date_completed = timezone.now()
         super().save(*args, **kwargs)
 
+SPECIALTY_CHOICES = [
+    ('THERAPIST', 'Терапевт'),
+    ('SURGEON', 'Хирург'),
+    ('PEDIATRICIAN', 'Педиатр'),
+    ('NEUROLOGIST', 'Невролог'),
+    ('CARDIOLOGIST', 'Кардиолог'),
+    ('DENTIST', 'Стоматолог'),
+]
+
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='doctor_profile')
-    specialty = models.CharField(max_length=100)
+    specialty = models.CharField(max_length=100, choices=SPECIALTY_CHOICES)
     experience = models.IntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(60)],
         null=True,

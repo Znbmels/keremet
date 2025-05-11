@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AnalysesPage.css';
 import { getAnalyses } from '../../api/Api';
+import CreateAnalysisForm from './CreateAnalysisForm';
 
 function AnalysesPage({ userRole = 'PATIENT', isProfileView = false }) {
     const navigate = useNavigate();
@@ -68,6 +69,13 @@ function AnalysesPage({ userRole = 'PATIENT', isProfileView = false }) {
                 )}
             </div>
 
+            {/* Показываем форму только для врача */}
+            {userRole === 'DOCTOR' && (
+                <div style={{marginBottom: 24}}>
+                    <CreateAnalysisForm onCreated={() => window.location.reload()} />
+                </div>
+            )}
+
             <div className="analyses-grid">
                 {analyses.length === 0 ? (
                     <div className="no-analyses">Нет доступных анализов</div>
@@ -84,13 +92,13 @@ function AnalysesPage({ userRole = 'PATIENT', isProfileView = false }) {
                                         Врач: {analysis.doctor.first_name} {analysis.doctor.last_name}
                                     </p>
                                 )}
-                                <p className={`analysis-status ${analysis.status === 'Готов' ? 'ready' : 'processing'}`}>Статус: {analysis.status}</p>
+                                <p className={`analysis-status ${analysis.status === 'READY' ? 'ready' : 'processing'}`}>Статус: {analysis.status === 'READY' ? 'Готов' : 'В обработке'}</p>
                             </div>
                             <div className="analysis-actions">
-                                {analysis.status === 'Готов' && analysis.result_file ? (
+                                {analysis.status === 'READY' && analysis.result_file ? (
                                     <button
                                         onClick={() => handleDownload(analysis)}
-                                        className="download-button"
+                                        className="download-button ready"
                                     >
                                         Скачать результат
                                     </button>
@@ -99,7 +107,7 @@ function AnalysesPage({ userRole = 'PATIENT', isProfileView = false }) {
                                         className="download-button processing"
                                         disabled
                                     >
-                                        {analysis.status === 'Готов' ? 'Файл не найден' : 'В обработке'}
+                                        В обработке
                                     </button>
                                 )}
                             </div>

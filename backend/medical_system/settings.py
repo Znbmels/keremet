@@ -25,13 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'medical_system',  # Using medical_system instead of clinic
+    'medical_system',  
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',  # Добавляем CORS middleware
+    'corsheaders.middleware.CorsMiddleware',  # Добавляем CORS 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -108,7 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 LANGUAGE_CODE = 'ru-ru'
-TIME_ZONE = 'Asia/Bishkek'
+TIME_ZONE = 'Asia/Astana'
 USE_I18N = True
 USE_TZ = True
 

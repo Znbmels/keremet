@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { patientApi } from '../../api/Api';
 import './AppointmentBookingPage.css';
@@ -21,13 +21,6 @@ export default function AppointmentBookingPage({ onBook }) {
     }
   }, [step]);
 
-  // Загрузка доступных слотов при выборе врача
-  useEffect(() => {
-    if (selectedDoctor) {
-      fetchAvailableSlots();
-    }
-  }, [selectedDoctor]);
-
   const fetchDoctors = async () => {
     try {
       setLoading(true);
@@ -42,7 +35,7 @@ export default function AppointmentBookingPage({ onBook }) {
     }
   };
 
-  const fetchAvailableSlots = async () => {
+  const fetchAvailableSlots = useCallback(async () => {
     try {
       setLoading(true);
       const data = await patientApi.getDoctorTimeSlots(selectedDoctor.id);
@@ -54,7 +47,13 @@ export default function AppointmentBookingPage({ onBook }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedDoctor]);
+
+  useEffect(() => {
+    if (selectedDoctor) {
+      fetchAvailableSlots();
+    }
+  }, [selectedDoctor, fetchAvailableSlots]);
 
   const handleSelectDoctor = (doctor) => {
     setSelectedDoctor(doctor);
@@ -63,12 +62,23 @@ export default function AppointmentBookingPage({ onBook }) {
   };
 
   const handleBook = async () => {
+    if (!selectedSlot) {
+      setError('Пожалуйста, выберите время приёма!');
+      return;
+    }
     try {
       setLoading(true);
-      await patientApi.bookAppointment({
+      console.log('selectedSlot:', selectedSlot);
+      console.log('selectedSlot.id:', selectedSlot?.id);
+      console.log('Booking appointment with data:', {
         time_slot: selectedSlot.id,
         status: 'SCHEDULED'
       });
+      const response = await patientApi.bookAppointment({
+        time_slot: selectedSlot.id,
+        status: 'SCHEDULED'
+      });
+      console.log('Appointment created successfully:', response);
       setSuccess(true);
       if (onBook) {
         onBook({
@@ -78,8 +88,17 @@ export default function AppointmentBookingPage({ onBook }) {
         });
       }
     } catch (err) {
-      setError('Ошибка при записи на прием');
+      let msg = 'Ошибка при записи на прием';
+      if (err.response?.data) {
+        msg += ': ' + JSON.stringify(err.response.data);
+      } else if (err.message) {
+        msg += ': ' + err.message;
+      }
+      setError(msg);
       console.error('Error booking appointment:', err);
+      if (err.response) {
+        console.error('Error response data:', err.response.data);
+      }
     } finally {
       setLoading(false);
     }
@@ -135,7 +154,7 @@ export default function AppointmentBookingPage({ onBook }) {
                       <p className="specialty">{doctor.specialty}</p>
                       <p className="experience">Стаж: {doctor.experience} лет</p>
                       {doctor.consultation_price && (
-                        <p className="price">Стоимость приема: {doctor.consultation_price} сом</p>
+                        <p className="price">Стоимость приема: {doctor.consultation_price} тенге</p>
                       )}
                     </div>
                   </div>

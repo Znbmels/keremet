@@ -40,11 +40,16 @@ function DoctorCard({ doctor, onSelect, isPatientView }) {
                 )}
                 {doctor.consultation_price && (
                     <div className="consultation-price-inline">
-                        Стоимость: {doctor.consultation_price} сом
+                        Стоимость: {doctor.consultation_price} тенге
                     </div>
                 )}
                 {isPatientView && (
-                    <button className="appointment-btn-wide">Записаться на прием</button>
+                    <button 
+                        className="appointment-btn-wide"
+                        onClick={onSelect}
+                    >
+                        Записаться на прием
+                    </button>
                 )}
             </div>
             {(doctor.description || doctor.achievements) && (

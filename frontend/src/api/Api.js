@@ -184,7 +184,11 @@ export const doctorApi = {
 
   createAnalysis: async (analysisData) => {
     try {
-      const response = await api.post('/analyses/', analysisData);
+      const response = await api.post('/analyses/', analysisData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       return response.data;
     } catch (error) {
       console.error('Error creating analysis:', error);

@@ -81,7 +81,7 @@ AUTH_PASSWORD_VALIDATORS = [
    ]
 
 # CORS settings
-CORS_ORIGIN_ALLOW_ALL = True  # Только для разработки!
+CORS_ORIGIN_ALLOW_ALL = True  #Только для разработки((если деплоить незабудьь убрать))!
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
@@ -135,8 +135,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your_email@gmail.com'  # Замените на ваш email
-EMAIL_HOST_PASSWORD = 'your_app_password'  # Замените на пароль приложения
+EMAIL_HOST_USER = 'your_email@gmail.com'  
+EMAIL_HOST_PASSWORD = 'your_app_password'  
 
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'

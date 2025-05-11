@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { commonApi } from '../../api/Api';
 import './DoctorsPage.css';
@@ -34,11 +34,7 @@ function DoctorsPage() {
         checkAuth();
     }, [navigate]);
 
-    useEffect(() => {
-        fetchDoctors();
-    }, [selectedSpecialty]);
-
-    const fetchDoctors = async () => {
+    const fetchDoctors = useCallback(async () => {
         try {
             setLoading(true);
             const data = await commonApi.getDoctors(selectedSpecialty);
@@ -53,7 +49,11 @@ function DoctorsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [selectedSpecialty, navigate]);
+
+    useEffect(() => {
+        fetchDoctors();
+    }, [fetchDoctors]);
 
     const handleDoctorSelect = (doctor) => {
         if (userRole === 'PATIENT') {
@@ -115,19 +115,18 @@ function DoctorsPage() {
                         'В выбранной специальности врачей не найдено'
                     }
                 </div>
-            ) : (
-                <div className="doctors-grid">
-                    {filteredDoctors.map(doctor => (
-                        <DoctorCard
-                            key={doctor.id}
-                            doctor={doctor}
-                            onSelect={() => handleDoctorSelect(doctor)}
-                            isPatientView={userRole === 'PATIENT'}
-                            isCurrentDoctor={doctor.id === parseInt(localStorage.getItem('user_id'))}
-                        />
-                    ))}
-                </div>
-            )}
+            ) : null}
+            <div className="doctors-grid">
+                {filteredDoctors.map(doctor => (
+                    <DoctorCard
+                        key={doctor.id}
+                        doctor={doctor}
+                        onSelect={() => handleDoctorSelect(doctor)}
+                        isPatientView={userRole === 'PATIENT'}
+                        isCurrentDoctor={doctor.id === parseInt(localStorage.getItem('user_id'))}
+                    />
+                ))}
+            </div>
         </div>
     );
 }

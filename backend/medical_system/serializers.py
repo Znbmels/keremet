@@ -50,7 +50,7 @@ class TimeSlotSerializer(serializers.ModelSerializer):
 class AppointmentSerializer(serializers.ModelSerializer):
     doctor = UserSerializer(read_only=True)
     patient = UserSerializer(read_only=True)
-    time_slot = serializers.PrimaryKeyRelatedField(queryset=TimeSlot.objects.all())
+    time_slot = TimeSlotSerializer(read_only=True)
     class Meta:
         model = Appointment
         fields = ['id', 'doctor', 'patient', 'time_slot', 'status', 'reason']
@@ -58,21 +58,31 @@ class AppointmentSerializer(serializers.ModelSerializer):
 class MedicalRecordSerializer(serializers.ModelSerializer):
     patient = UserSerializer(read_only=True)
     doctor = UserSerializer(read_only=True)
+    analysis_file_url = serializers.SerializerMethodField()
     class Meta:
         model = MedicalRecord
-        fields = ['id', 'patient', 'doctor', 'diagnosis', 'prescription', 'test_result', 'created_at']
+        fields = ['id', 'patient', 'doctor', 'complaints', 'diagnosis', 'prescription', 'test_result', 'analysis_file', 'analysis_file_url', 'created_at']
+
+    def get_analysis_file_url(self, obj):
+        if obj.analysis_file:
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.analysis_file.url)
+            return obj.analysis_file.url
+        return None
 
 class AnalysisSerializer(serializers.ModelSerializer):
-    patient = UserSerializer(read_only=True)
+    patient = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(role='PATIENT'))
     doctor = UserSerializer(read_only=True)
     status_display = serializers.CharField(source='get_status_display', read_only=True)
     result_file_url = serializers.SerializerMethodField()
+    description = serializers.CharField(allow_blank=True, required=False)
 
     class Meta:
         model = Analysis
         fields = ['id', 'patient', 'doctor', 'name', 'description', 'status', 'status_display', 
                  'result_file', 'result_file_url', 'date_added', 'date_completed']
-        read_only_fields = ['patient', 'doctor', 'date_added', 'date_completed']
+        read_only_fields = ['doctor', 'date_added', 'date_completed']
 
     def get_result_file_url(self, obj):
         if obj.result_file:
