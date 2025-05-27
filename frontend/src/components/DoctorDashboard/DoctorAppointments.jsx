@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { doctorApi } from '../../api/Api';
+import { doctorApi, ratingApi } from '../../api/Api';
 import './DoctorAppointments.css';
 
 function DoctorAppointments() {
@@ -12,10 +12,13 @@ function DoctorAppointments() {
         startTime: '',
         endTime: '',
     });
+    const [doctorRating, setDoctorRating] = useState(0);
+    const [ratingCount, setRatingCount] = useState(0);
 
     useEffect(() => {
         fetchAppointments();
         fetchTimeSlots();
+        fetchDoctorRating();
     }, [selectedDate]);
 
     const fetchAppointments = async () => {
@@ -35,6 +38,22 @@ function DoctorAppointments() {
             console.error('Error fetching time slots:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchDoctorRating = async () => {
+        try {
+            const ratingsData = await ratingApi.getAllRatings();
+            if (Array.isArray(ratingsData) && ratingsData.length > 0) {
+                const avgRating = ratingsData.reduce((sum, item) => sum + item.rating, 0) / ratingsData.length;
+                setDoctorRating(avgRating);
+                setRatingCount(ratingsData.length);
+            } else if (typeof ratingsData === 'object' && ratingsData.average_rating !== undefined) {
+                setDoctorRating(ratingsData.average_rating);
+                setRatingCount(ratingsData.rating_count || 0);
+            }
+        } catch (error) {
+            console.error('Ошибка при загрузке рейтинга для DoctorDashboard:', error);
         }
     };
 
@@ -64,6 +83,17 @@ function DoctorAppointments() {
         <div className="doctor-appointments-container">
             <div className="dashboard-header">
                 <h1>Управление расписанием</h1>
+                <div className="doctor-rating-summary">
+                    <h3>Ваш рейтинг</h3>
+                    <div className="doctor-dashboard-rating-display">
+                        <span className="doctor-dashboard-rating-value">
+                            {doctorRating.toFixed(1)}
+                        </span>
+                        <span className="doctor-dashboard-rating-count">
+                            ({ratingCount} {getRatingWord(ratingCount)})
+                        </span>
+                    </div>
+                </div>
                 <div className="date-selector">
                     <input
                         type="date"
@@ -144,6 +174,16 @@ function DoctorAppointments() {
             </div>
         </div>
     );
+}
+
+function getRatingWord(count) {
+    if (count % 10 === 1 && count % 100 !== 11) {
+        return 'оценка';
+    } else if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) {
+        return 'оценки';
+    } else {
+        return 'оценок';
+    }
 }
 
 export default DoctorAppointments; 

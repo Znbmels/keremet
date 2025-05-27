@@ -130,6 +130,43 @@
     color: #666;
 }
 
+.doctor-rating-summary {
+    background-color: white;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+}
+
+.doctor-rating-summary h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    color: #333;
+}
+
+.doctor-dashboard-rating-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    background-color: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
+
+.doctor-dashboard-rating-value {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #007bff;
+    margin-right: 8px;
+}
+
+.doctor-dashboard-rating-count {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
 @media (max-width: 768px) {
     .doctor-appointments-container {
         padding: 1rem;

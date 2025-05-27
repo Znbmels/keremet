@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { doctorApi } from '../../api/Api';
 import './DoctorSchedulePage.css';
 
@@ -15,12 +15,8 @@ function DoctorSchedulePage() {
         duration: 30
     });
 
-    useEffect(() => {
-        fetchTimeSlots();
-        fetchAppointments();
-    }, [selectedDate]);
-
-    const fetchTimeSlots = async () => {
+    const fetchTimeSlots = useCallback(async () => {
+        setLoading(true);
         try {
             const data = await doctorApi.getMyTimeSlots(selectedDate);
             setTimeSlots(data);
@@ -29,9 +25,9 @@ function DoctorSchedulePage() {
             setError('Ошибка при загрузке расписания');
             console.error('Error fetching time slots:', err);
         }
-    };
+    }, [selectedDate]);
 
-    const fetchAppointments = async () => {
+    const fetchAppointments = useCallback(async () => {
         try {
             const data = await doctorApi.getMyAppointments(selectedDate);
             setAppointments(data);
@@ -40,7 +36,12 @@ function DoctorSchedulePage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [selectedDate]);
+
+    useEffect(() => {
+        fetchTimeSlots();
+        fetchAppointments();
+    }, [fetchTimeSlots, fetchAppointments]);
 
     const handleAddTimeSlot = async (e) => {
         e.preventDefault();

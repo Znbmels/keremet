@@ -92,4 +92,174 @@
     margin-bottom: 15px;
 }
 
+.rate-doctor-btn {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.3s;
+}
+
+.rate-doctor-btn:hover {
+    background-color: #0d8aee;
+}
+
+/* Модальное окно рейтинга */
+.rating-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.rating-modal {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    width: 400px;
+    max-width: 90%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.rating-modal h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 20px;
+}
+
+.rating-slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.rating-slider {
+    width: 80%;
+    margin-bottom: 10px;
+    cursor: pointer;
+    /* Стили для ползунка (могут потребовать префиксов для разных браузеров) */
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    background: #ddd;
+    border-radius: 5px;
+    outline: none;
+}
+
+.rating-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #2196f3; /* Цвет ползунка */
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.rating-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #2196f3;
+    border-radius: 50%;
+    cursor: pointer;
+    border: none; /* Убрать рамку в Firefox */
+}
+
+.rating-slider-value {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.rating-comment {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.rating-error {
+    color: #d32f2f;
+    margin-bottom: 12px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.rating-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancel-rating-btn, .submit-rating-btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.cancel-rating-btn {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.cancel-rating-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.submit-rating-btn {
+    background-color: #2196f3;
+    color: white;
+    border: none;
+}
+
+.submit-rating-btn:hover {
+    background-color: #0d8aee;
+}
+
+.submit-rating-btn:disabled, .cancel-rating-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
 /* Добавьте стили для других статусов, если необходимо */
+
+.rating-modal .rating-stars-container.modal-stars .stars-container .star-icon {
+    /* Общие стили для иконок звезд в модальном окне, если нужны */
+    cursor: pointer; /* Добавим, чтобы было понятно что они кликабельны */
+}
+
+/* .rating-modal .rating-stars-container.modal-stars .stars-container .star-icon.star-filled {
+    color: #FFD700; 
+    fill: #FFD700;  
+}
+
+.rating-modal .rating-stars-container.modal-stars .stars-container .star-icon.star-empty {
+    color: #777; 
+    fill: #777; 
+} */
+
+/* Удаляем или комментируем менее специфичные правила, если они дублируются и могут конфликтовать */
+/* Если эти классы используются где-то еще в этом файле вне модального окна, их нужно оставить */
+/* или сделать отдельные правила для тех контекстов. */
+/* В данном случае, предполагаем, что общие .star-filled и .star-empty могут остаться для других частей, */
+/* а эти специфичные правила их переопределят для модального окна. */

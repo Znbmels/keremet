@@ -6,6 +6,7 @@ const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
+    'Accept': 'application/json',
   },
 });
 
@@ -236,7 +237,7 @@ export const doctorApi = {
 
   updateAppointmentStatus: async (appointmentId, status) => {
     try {
-      const response = await api.patch(`/doctor/appointments/${appointmentId}/`, { status });
+      const response = await api.patch(`/appointments/${appointmentId}/`, { status });
       return response.data;
     } catch (error) {
       console.error('Error updating appointment status:', error);
@@ -381,6 +382,55 @@ export const getAnalyses = async () => {
     console.error('Error fetching analyses:', error);
     throw error.response?.data || error.message;
   }
+};
+
+export const ratingApi = {
+  getAllRatings: async () => {
+    try {
+      const response = await api.get('/ratings/');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all ratings:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getDoctorRating: async (doctorId) => {
+    try {
+      const response = await api.get(`/ratings/average-rating/?doctor_id=${doctorId}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching doctor specific rating:', error);
+      if (error.response?.status === 404) {
+        return { average_rating: 0, rating_count: 0 };
+      }
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createRating: async (ratingData) => {
+    try {
+      const response = await api.post('/ratings/', ratingData);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating rating:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  rateDoctorVisit: async (doctorId, appointmentId, rating, comment = '') => {
+    try {
+      const response = await api.post('/ratings/', {
+        appointment: appointmentId,
+        rating,
+        comment
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error rating doctor:', error);
+      throw error.response?.data || error.message;
+    }
+  },
 };
 
 export default api;

@@ -257,3 +257,20 @@
 .modal-actions .save-button:hover {
     background-color: #008ba7;
 }
+.doctor-rating-section,
+.doctor-ratings-list {
+    margin-top: 24px;
+}
+
+.doctor-rating-section .flex {
+    align-items: center;
+    margin-top: 10px;
+}
+
+.doctor-ratings-list .p-4 {
+    background-color: #f9f9f9;
+}
+
+.doctor-ratings-list .flex {
+    align-items: center;
+}

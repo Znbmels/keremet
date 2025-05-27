@@ -1,0 +1,107 @@
+.rating-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.rating-modal {
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 450px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.rating-modal h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.rating-modal p {
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.rating-modal .form-group {
+    margin-bottom: 15px;
+}
+
+.rating-modal label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #444;
+}
+
+.rating-modal .rating-slider {
+    width: 100%;
+    cursor: pointer;
+}
+
+.rating-modal textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 80px;
+}
+
+.rating-modal .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; /* Расстояние между кнопками */
+    margin-top: 20px;
+}
+
+/* Общие стили для кнопок в модальном окне, если не используются глобальные */
+.rating-modal .button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.rating-modal .primary-button {
+    background-color: #007bff;
+    color: white;
+}
+
+.rating-modal .primary-button:hover {
+    background-color: #0056b3;
+}
+
+.rating-modal .secondary-button {
+    background-color: #6c757d;
+    color: white;
+}
+
+.rating-modal .secondary-button:hover {
+    background-color: #545b62;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+} 

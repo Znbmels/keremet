@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 import ThreeMultiBox from '../ThreeMultiBox/ThreeMultiBox';
-import Footer from '../Footer/Footer';
+// import Footer from '../Footer/Footer'; // Удаляем неиспользуемый импорт
 import photo from '../../assets/homepage.png'; // Импортируем изображение
 
 function HomePage() {

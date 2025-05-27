@@ -4,13 +4,14 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.mail import send_mail
 from django.utils import timezone
-from .models import User, TimeSlot, Appointment, MedicalRecord, Analysis, Doctor
-from .serializers import UserSerializer, TimeSlotSerializer, AppointmentSerializer, MedicalRecordSerializer, AnalysisSerializer, DoctorSerializer
+from .models import User, TimeSlot, Appointment, MedicalRecord, Analysis, Doctor, DoctorRating
+from .serializers import UserSerializer, TimeSlotSerializer, AppointmentSerializer, MedicalRecordSerializer, AnalysisSerializer, DoctorSerializer, DoctorRatingSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
+from django.db.models import Avg, Count
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,9 +36,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            # Create user
             user = serializer.save()
-            # Set password
             user.set_password(request.data.get('password'))
             user.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -76,7 +75,6 @@ class DoctorViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(doctor)
             return Response(serializer.data)
         
-        # Обновление профиля
         serializer = self.get_serializer(doctor, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
@@ -183,18 +181,15 @@ class AnalysisViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Analysis.objects.all()
         
-        # Фильтрация по роли пользователя
         if user.role == 'DOCTOR':
             queryset = queryset.filter(doctor=user)
         elif user.role == 'PATIENT':
             queryset = queryset.filter(patient=user)
         
-        # Фильтрация по статусу
         status = self.request.query_params.get('status', None)
         if status:
             queryset = queryset.filter(status=status)
         
-        # Фильтрация по дате
         date_from = self.request.query_params.get('date_from', None)
         date_to = self.request.query_params.get('date_to', None)
         if date_from:
@@ -205,7 +200,6 @@ class AnalysisViewSet(viewsets.ModelViewSet):
         return queryset.order_by('-date_added')
 
     def perform_create(self, serializer):
-        # Сохраняем все поля, которые приходят с фронта
         serializer.save(doctor=self.request.user)
 
     @action(detail=True, methods=['post'])
@@ -294,7 +288,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             response = super().post(request, *args, **kwargs)
             if response.status_code == 200:
                 logger.info(f"User {email} logged in successfully")
-                # Add user role to response
                 response.data['user_role'] = user.role
                 response.data['user_id'] = user.id
                 response.data['full_name'] = f"{user.first_name} {user.last_name}"
@@ -312,3 +305,63 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 {"detail": "Произошла ошибка при входе в систему."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class DoctorRatingViewSet(viewsets.ModelViewSet):
+    queryset = DoctorRating.objects.all()
+    serializer_class = DoctorRatingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = DoctorRating.objects.all()
+        doctor_id = self.request.query_params.get('doctor_id', None)
+        patient_id = self.request.query_params.get('patient_id', None)
+        appointment_id = self.request.query_params.get('appointment_id', None)
+
+        if doctor_id is not None:
+            try:
+                queryset = queryset.filter(doctor_id=int(doctor_id))
+            except ValueError:
+                return DoctorRating.objects.none()
+        if patient_id is not None:
+            try:
+                queryset = queryset.filter(patient_id=int(patient_id))
+            except ValueError:
+                return DoctorRating.objects.none()
+        if appointment_id is not None:
+            try:
+                queryset = queryset.filter(appointment_id=int(appointment_id))
+            except ValueError:
+                return DoctorRating.objects.none()
+        
+        return queryset
+
+    def perform_create(self, serializer):
+        appointment_instance = serializer.validated_data['appointment']
+        final_doctor = appointment_instance.doctor
+        serializer.save(patient=self.request.user, doctor=final_doctor)
+
+    @action(detail=False, methods=['get'], url_path='average-rating', permission_classes=[permissions.AllowAny])
+    def average_rating(self, request):
+        doctor_id = request.query_params.get('doctor_id')
+        if not doctor_id:
+            return Response({"error": "doctor_id is required"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            doctor_id_int = int(doctor_id)
+            doctor_user = get_object_or_404(User, id=doctor_id_int, role='DOCTOR')
+        except ValueError:
+            return Response({"error": "doctor_id must be an integer"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        avg_rating_data = DoctorRating.objects.filter(doctor=doctor_user).aggregate(
+            average_rating=Avg('rating'),
+            rating_count=Count('id')
+        )
+        
+        avg_val = avg_rating_data['average_rating']
+        count_val = avg_rating_data['rating_count']
+
+        return Response({
+            "doctor_id": doctor_id_int,
+            "average_rating": round(avg_val, 1) if avg_val is not None else 0.0,
+            "rating_count": count_val
+        })
