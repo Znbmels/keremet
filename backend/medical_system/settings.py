@@ -27,6 +27,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'medical_system',  
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 MIDDLEWARE = [
@@ -134,3 +136,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user model
 AUTH_USER_MODEL = 'medical_system.User' 
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

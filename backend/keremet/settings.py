@@ -157,3 +157,5 @@ AUTH_USER_MODEL = 'medical_system.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'

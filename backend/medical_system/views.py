@@ -8,6 +8,7 @@ from .models import User, TimeSlot, Appointment, MedicalRecord, Analysis, Doctor
 from .serializers import UserSerializer, TimeSlotSerializer, AppointmentSerializer, MedicalRecordSerializer, AnalysisSerializer, DoctorSerializer, DoctorRatingSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
+from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
@@ -272,37 +273,46 @@ class DoctorDashboardView(generics.ListAPIView):
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         try:
-            email = request.data.get('email')
-            User = get_user_model()
-            
-            try:
-                user = User.objects.get(email=email)
-                logger.info(f"Login attempt for user: {email}")
-            except ObjectDoesNotExist:
-                logger.warning(f"Login attempt failed: User with email {email} not found")
-                return Response(
-                    {"detail": "Пользователь с таким email не найден."},
-                    status=status.HTTP_404_NOT_FOUND
-                )
-
+            # Позволяем родительскому классу обработать запрос и валидацию
             response = super().post(request, *args, **kwargs)
-            if response.status_code == 200:
-                logger.info(f"User {email} logged in successfully")
-                response.data['user_role'] = user.role
-                response.data['user_id'] = user.id
-                response.data['full_name'] = f"{user.first_name} {user.last_name}"
+
+            if response.status_code == status.HTTP_200_OK:
+                serializer = self.get_serializer(data=request.data)
+                try:
+                    serializer.is_valid(raise_exception=True) 
+                    user = serializer.user
+                    if user: 
+                        logger.info(f"User {user.email} logged in successfully")
+                        response.data['user_role'] = user.role
+                        response.data['user_id'] = user.id
+                        response.data['full_name'] = f"{user.first_name} {user.last_name}"
+                    else:
+                        logger.error("User object not found via serializer after successful token generation by superclass.")
+                except TokenError: 
+                    logger.error("TokenError while trying to re-validate serializer to get user object.")
+                    pass
+
             return response
 
-        except TokenError as e:
-            logger.error(f"Token error during login: {str(e)}")
+        except (TokenError, AuthenticationFailed) as e:
+            logger.warning(f"Authentication/Token error during login: {str(e)}. Type: {type(e).__name__}. Details: {e.args}")
+            detail_message = getattr(e, 'detail', None)
+            if detail_message is None and e.args:
+                 detail_message = e.args[0]
+            if detail_message is None:
+                detail_message = "Неверный email или пароль."
+
+            if isinstance(detail_message, dict) and 'detail' in detail_message:
+                detail_message = detail_message['detail']
+            
             return Response(
-                {"detail": "Неверный пароль."},
+                {"detail": str(detail_message)},
                 status=status.HTTP_401_UNAUTHORIZED
             )
         except Exception as e:
-            logger.error(f"Unexpected error during login: {str(e)}")
+            logger.error(f"Unexpected error during login for request data {request.data}: {str(e)}", exc_info=True)
             return Response(
-                {"detail": "Произошла ошибка при входе в систему."},
+                {"detail": "Произошла непредвиденная ошибка при входе в систему."},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

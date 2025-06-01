@@ -1,14 +1,12 @@
-from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenRefreshView
 from .views import (
     UserViewSet, DoctorViewSet, TimeSlotViewSet, AppointmentViewSet,
     MedicalRecordViewSet, AnalysisViewSet, PatientDashboardView,
-    DoctorDashboardView, CustomTokenObtainPairView, DoctorRatingViewSet  # Добавляем DoctorRatingViewSet
+    DoctorDashboardView, CustomTokenObtainPairView, DoctorRatingViewSet
 )
 
-# Создаём маршрутизатор
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
 router.register(r'doctors', DoctorViewSet)
@@ -16,9 +14,8 @@ router.register(r'time-slots', TimeSlotViewSet)
 router.register(r'appointments', AppointmentViewSet)
 router.register(r'medical-records', MedicalRecordViewSet)
 router.register(r'analyses', AnalysisViewSet)
-router.register(r'ratings', DoctorRatingViewSet)  # Добавляем маршрут для рейтингов
+router.register(r'ratings', DoctorRatingViewSet)
 
-# URL patterns для API
 urlpatterns = [
     path('', include(router.urls)),
     path('auth/login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
